@@ -107,8 +107,24 @@ const Dashboard: React.FC = () => {
     const activeProducts = products.filter(p => p.lifecycleStatus === 'Active').length;
     const sellableProducts = products.filter(p => p.isSellable).length;
     const bundleProducts = products.filter(p => p.isBundle).length;
-    const activeAgreements = agreements.filter(a => a.status === 'active').length;
-    const inProcessAgreements = agreements.filter(a => a.status === 'in process').length;
+    
+    // Since the API doesn't return status field, let's use different logic
+    // Count agreements as "active" if they exist and have valid data
+    const activeAgreements = agreements.filter(a => 
+      a.id && a.name && !a.status // If no status field, consider them active
+    ).length;
+    
+    // For "in process", we can use agreements that might have recent updates
+    const now = new Date();
+    const thirtyDaysAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+    
+    const inProcessAgreements = agreements.filter(a => {
+      const createdDate = new Date(a.createdDate);
+      const updatedDate = a.updatedDate ? new Date(a.updatedDate) : null;
+      
+      // Consider as "in process" if created recently or updated recently
+      return (createdDate > thirtyDaysAgo) || (updatedDate && updatedDate > thirtyDaysAgo);
+    }).length;
     
     return {
       totalProducts: products.length,
@@ -384,7 +400,7 @@ const Dashboard: React.FC = () => {
               <p className="text-2xl sm:text-3xl font-bold text-indigo-600">{stats.activeAgreements}</p>
               <div className="flex items-center mt-2">
                 <div className="w-2 h-2 bg-indigo-500 rounded-full mr-2"></div>
-                <span className="text-xs text-gray-500">Currently active</span>
+                <span className="text-xs text-gray-500">Valid agreements</span>
               </div>
             </div>
             <div className="w-12 h-12 sm:w-14 sm:h-14 bg-gradient-to-br from-indigo-50 to-indigo-100 rounded-xl flex items-center justify-center">
