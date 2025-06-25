@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Plus, Package, BarChart3, Settings, FileText, Users, TrendingUp, Menu, X, User, ChevronDown } from 'lucide-react';
+import { Plus, Package, BarChart3, Settings, FileText, Users, TrendingUp, Menu, X, User, ChevronDown, CheckCircle, AlertCircle } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import ProductOfferingForm from './ProductOfferingForm';
 import ProductList from './ProductList';
@@ -12,6 +12,12 @@ import { agreementService } from '../services/agreementService';
 
 type View = 'dashboard' | 'add-product' | 'products' | 'add-agreement' | 'agreements';
 
+interface Notification {
+  id: string;
+  type: 'success' | 'error';
+  message: string;
+}
+
 const Dashboard: React.FC = () => {
   const [currentView, setCurrentView] = useState<View>('dashboard');
   const [products, setProducts] = useState<ProductOffering[]>([]);
@@ -21,8 +27,25 @@ const Dashboard: React.FC = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isUserProfileOpen, setIsUserProfileOpen] = useState(false);
   const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false);
+  const [notifications, setNotifications] = useState<Notification[]>([]);
   
   const { user, logout } = useAuth();
+
+  const showNotification = (type: 'success' | 'error', message: string) => {
+    const id = Math.random().toString(36).substr(2, 9);
+    const notification: Notification = { id, type, message };
+    
+    setNotifications(prev => [...prev, notification]);
+    
+    // Auto-remove notification after 5 seconds
+    setTimeout(() => {
+      setNotifications(prev => prev.filter(n => n.id !== id));
+    }, 5000);
+  };
+
+  const removeNotification = (id: string) => {
+    setNotifications(prev => prev.filter(n => n.id !== id));
+  };
 
   const handleLogout = () => {
     logout();
@@ -75,31 +98,49 @@ const Dashboard: React.FC = () => {
   }, [isUserDropdownOpen]);
 
   const handleAddProduct = (product: ProductOffering) => {
-    const newProduct = {
-      ...product,
-      id: Math.random().toString(36).substr(2, 9),
-      lastUpdate: new Date().toISOString()
-    };
-    setProducts(prev => [...prev, newProduct]);
-    setCurrentView('products');
+    try {
+      const newProduct = {
+        ...product,
+        id: Math.random().toString(36).substr(2, 9),
+        lastUpdate: new Date().toISOString()
+      };
+      setProducts(prev => [...prev, newProduct]);
+      setCurrentView('products');
+      showNotification('success', `Product "${product.name}" added successfully!`);
+    } catch (error) {
+      showNotification('error', 'Failed to add product. Please try again.');
+    }
   };
 
   const handleDeleteProduct = (id: string) => {
-    setProducts(prev => prev.filter(product => product.id !== id));
+    try {
+      const product = products.find(p => p.id === id);
+      setProducts(prev => prev.filter(product => product.id !== id));
+      showNotification('success', `Product "${product?.name || 'item'}" removed successfully!`);
+    } catch (error) {
+      showNotification('error', 'Failed to remove product. Please try again.');
+    }
   };
 
   const handleAddAgreement = (agreement: Agreement) => {
-    setAgreements(prev => [...prev, agreement]);
-    setCurrentView('agreements');
+    try {
+      setAgreements(prev => [...prev, agreement]);
+      setCurrentView('agreements');
+      showNotification('success', `Agreement "${agreement.name}" added successfully!`);
+    } catch (error) {
+      showNotification('error', 'Failed to add agreement. Please try again.');
+    }
   };
 
   const handleDeleteAgreement = async (id: string) => {
     try {
+      const agreement = agreements.find(a => a.id === id);
       await agreementService.deleteAgreement(id);
       setAgreements(prev => prev.filter(agreement => agreement.id !== id));
+      showNotification('success', `Agreement "${agreement?.name || 'item'}" removed successfully!`);
     } catch (error) {
       console.error('Error deleting agreement:', error);
-      alert('Failed to delete agreement. Please try again.');
+      showNotification('error', 'Failed to remove agreement. Please try again.');
     }
   };
 
@@ -733,6 +774,49 @@ const Dashboard: React.FC = () => {
           isOpen={isUserProfileOpen} 
           onClose={() => setIsUserProfileOpen(false)} 
         />
+
+        {/* Notification Toast Container */}
+        <div className="fixed top-4 right-4 z-50 space-y-2">
+          {notifications.map((notification) => (
+            <div
+              key={notification.id}
+              className={`max-w-sm w-full bg-white border-l-4 rounded-lg shadow-lg p-4 transition-all duration-300 transform ${
+                notification.type === 'success' 
+                  ? 'border-green-500' 
+                  : 'border-red-500'
+              }`}
+            >
+              <div className="flex items-center">
+                <div className="flex-shrink-0">
+                  {notification.type === 'success' ? (
+                    <CheckCircle className="w-5 h-5 text-green-500" />
+                  ) : (
+                    <AlertCircle className="w-5 h-5 text-red-500" />
+                  )}
+                </div>
+                <div className="ml-3 flex-1">
+                  <p className={`text-sm font-medium ${
+                    notification.type === 'success' ? 'text-green-800' : 'text-red-800'
+                  }`}>
+                    {notification.message}
+                  </p>
+                </div>
+                <div className="ml-4 flex-shrink-0">
+                  <button
+                    onClick={() => removeNotification(notification.id)}
+                    className={`inline-flex rounded-md p-1.5 focus:outline-none focus:ring-2 focus:ring-offset-2 ${
+                      notification.type === 'success'
+                        ? 'text-green-400 hover:bg-green-50 focus:ring-green-600'
+                        : 'text-red-400 hover:bg-red-50 focus:ring-red-600'
+                    }`}
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
