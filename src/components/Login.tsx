@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import { useLanguage } from '../contexts/LanguageContext';
+import { useTranslation } from 'react-i18next';
+import LanguageSelector from './LanguageSelector';
 import { Eye, EyeOff, AlertCircle } from 'lucide-react';
 
 const Login: React.FC = () => {
@@ -12,7 +13,7 @@ const Login: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   
   const { login } = useAuth();
-  const { t } = useLanguage();
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -28,10 +29,10 @@ const Login: React.FC = () => {
       if (success) {
         navigate(from, { replace: true });
       } else {
-        setError(t('auth.invalidCredentials'));
+        setError(t('errors.unauthorized'));
       }
     } catch (err) {
-      setError(t('auth.invalidCredentials'));
+      setError(t('errors.unauthorized'));
     } finally {
       setIsLoading(false);
     }
@@ -40,6 +41,11 @@ const Login: React.FC = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#0072CE] to-[#4CAF50] py-4 sm:py-8 lg:py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-sm sm:max-w-md w-full space-y-4 sm:space-y-6 lg:space-y-8">
+        {/* Language Selector - Top Right */}
+        <div className="flex justify-end mb-4">
+          <LanguageSelector className="bg-white/20 text-white border-white/30 hover:bg-white/30" />
+        </div>
+        
         <div className="bg-white rounded-lg shadow-xl p-4 sm:p-6 lg:p-8">
           {/* Logo and header */}
           <div className="text-center">
@@ -49,9 +55,9 @@ const Login: React.FC = () => {
               className="mx-auto h-12 sm:h-14 lg:h-16 w-auto mb-3 sm:mb-4"
             />
             <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-1 sm:mb-2">
-              {t('auth.signIn')}
+              {t('auth.welcomeBack')}
             </h2>
-            <p className="text-sm sm:text-base text-gray-600">Consent Management System</p>
+            <p className="text-sm sm:text-base text-gray-600">{t('adminDashboard.title')}</p>
           </div>
 
           {/* Demo credentials */}
@@ -86,7 +92,7 @@ const Login: React.FC = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className="mt-1 block w-full px-3 py-2 text-sm sm:text-base border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-[#0072CE] focus:border-[#0072CE] transition-colors"
-                placeholder="Enter your email"
+                placeholder={t('auth.email')}
               />
             </div>
 
@@ -152,18 +158,18 @@ const Login: React.FC = () => {
                 {isLoading ? (
                   <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
                 ) : (
-                  t('auth.signInButton')
+                  t('common.login')
                 )}
               </button>
             </div>
 
             <div className="text-center">
-              <span className="text-sm text-gray-600">{t('auth.noAccount')} </span>
+              <span className="text-sm text-gray-600">{t('auth.dontHaveAccount')} </span>
               <Link
                 to="/signup"
                 className="font-medium text-[#0072CE] hover:text-[#005bb5] transition-colors"
               >
-                {t('auth.signUp')}
+                {t('common.signup')}
               </Link>
             </div>
           </form>

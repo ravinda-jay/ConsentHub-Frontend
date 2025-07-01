@@ -4,7 +4,7 @@ import { LanguageProvider } from './contexts/LanguageContext';
 import Login from './components/auth/Login';
 import Signup from './components/auth/Signup';
 import ForgotPassword from './components/auth/ForgotPassword';
-import Dashboard from './components/Dashboard';
+import RoleBasedDashboard from './components/RoleBasedDashboard';
 import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
@@ -20,7 +20,7 @@ function App() {
               path="/dashboard"
               element={
                 <ProtectedRoute>
-                  <Dashboard />
+                  <RoleBasedDashboard />
                 </ProtectedRoute>
               }
             />

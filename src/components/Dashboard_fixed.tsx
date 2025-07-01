@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Plus, Package, BarChart3, Settings, FileText, Users, Menu, X, User, ChevronDown, CheckCircle, AlertCircle, Shield, Eye, Clock, Database } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
-import { useTranslation } from 'react-i18next';
-import LanguageSelector from './LanguageSelector';
 import ProductOfferingForm from './ProductOfferingForm';
 import ProductList from './ProductList';
 import AgreementForm from './AgreementForm';
@@ -21,7 +19,6 @@ interface Notification {
 }
 
 const Dashboard: React.FC = () => {
-  const { t } = useTranslation();
   const [currentView, setCurrentView] = useState<View>('dashboard');
   const [products, setProducts] = useState<ProductOffering[]>([]);
   const [agreements, setAgreements] = useState<Agreement[]>([]);
@@ -852,18 +849,16 @@ const Dashboard: React.FC = () => {
                     className="w-5 h-5 object-contain"
                   />
                 </div>
-                <h1 className="text-xl lg:text-2xl font-bold text-gray-900 truncate">{t('adminDashboard.title')}</h1>
+                <h1 className="text-xl lg:text-2xl font-bold text-gray-900 truncate">Consent Management System</h1>
               </div>
             </div>
 
-            {/* Right side - Language Selector and User Profile Section */}
-            <div className="flex items-center space-x-4 flex-shrink-0">
-              <LanguageSelector />
-              <div className="relative user-dropdown">
-                <button
-                  onClick={() => setIsUserDropdownOpen(!isUserDropdownOpen)}
-                  className="flex items-center space-x-3 px-3 py-2 rounded-lg hover:bg-gray-50 transition-colors h-10"
-                >
+            {/* Right side - User Profile Section */}
+            <div className="relative user-dropdown flex-shrink-0">
+              <button
+                onClick={() => setIsUserDropdownOpen(!isUserDropdownOpen)}
+                className="flex items-center space-x-3 px-3 py-2 rounded-lg hover:bg-gray-50 transition-colors h-10"
+              >
                 <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-full flex items-center justify-center flex-shrink-0">
                   <User className="w-4 h-4 text-white" />
                 </div>
@@ -910,7 +905,6 @@ const Dashboard: React.FC = () => {
                   </div>
                 </div>
               )}
-              </div>
             </div>
           </div>
         </div>
