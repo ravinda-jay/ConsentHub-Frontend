@@ -37,11 +37,16 @@
     "about": "පිළිබඳව"
   },
   "auth": {
+    "signIn": "ප්‍රවේශ වන්න",
+    "signInButton": "ප්‍රවේශ වන්න",
+    "signUp": "ලියාපදිංචි වන්න",
     "welcomeBack": "නැවත සාදරයෙන් පිළිගනිමු",
     "email": "විද්‍යුත් තැපෑල",
     "password": "මුරපදය",
     "rememberMe": "මාව මතක තබා ගන්න",
     "forgotPassword": "මුරපදය අමතක වුණාද?",
+    "invalidCredentials": "වලංගු නොවන විද්‍යුත් තැපෑල හෝ මුරපදය",
+    "noAccount": "ගිණුමක් නැද්ද?",
     "dontHaveAccount": "ගිණුමක් නැද්ද?",
     "alreadyHaveAccount": "දැනටමත් ගිණුමක් තිබේද?",
     "createAccount": "ගිණුමක් සාදන්න",

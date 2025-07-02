@@ -37,11 +37,16 @@
     "about": "About"
   },
   "auth": {
+    "signIn": "Sign In",
+    "signInButton": "Sign In",
+    "signUp": "Sign Up",
     "welcomeBack": "Welcome Back",
     "email": "Email",
     "password": "Password",
     "rememberMe": "Remember Me",
     "forgotPassword": "Forgot Password?",
+    "invalidCredentials": "Invalid email or password",
+    "noAccount": "Don't have an account?",
     "dontHaveAccount": "Don't have an account?",
     "alreadyHaveAccount": "Already have an account?",
     "createAccount": "Create Account",
