@@ -19,7 +19,16 @@ mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/consent-m
   .catch(err => console.error('MongoDB connection error:', err));
 
 // Middleware
-app.use(cors());
+// CORS configuration
+app.use(cors({
+  origin: [
+    'http://localhost:5173', // local frontend
+    'https://consent-management-system-api.vercel.app', // your deployed frontend
+  ],
+  methods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true
+}));
 app.use(bodyParser.json());
 
 // TMF Forum API Routes
