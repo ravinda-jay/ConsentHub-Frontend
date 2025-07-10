@@ -1,6 +1,8 @@
+
 import { Agreement } from '../types/Agreement';
 
-const API_BASE_URL = 'https://agreement-management-backend.onrender.com/agreements';
+// Use Vite environment variable for API base URL
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 export const agreementService = {
   async getAllAgreements(params?: {
