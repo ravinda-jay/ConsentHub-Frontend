@@ -1,6 +1,6 @@
 import { Agreement } from '../types/Agreement';
 
-const API_BASE_URL = 'https://agreement-management-backend-production.up.railway.app/agreements';
+const API_BASE_URL = 'https://agreement-management-backend.onrender.com/agreements';
 
 export const agreementService = {
   async getAllAgreements(params?: {
