@@ -28,7 +28,8 @@ app.use(cors({
       'http://localhost:5173',
       'http://localhost:3000',
       'https://consent-management-system-api.vercel.app',
-      'https://consent-management-system-front-end.vercel.app'
+      'https://consent-management-system-front-end.vercel.app',
+      'https://agreement-management-backend.onrender.com'
     ];
     
     console.log('CORS request from origin:', origin);
