@@ -1,7 +1,5 @@
 # Consent Management System - Frontend
 
-![SLT Mobitel Logo](./public/SLTMobitel_Logo.svg.png)
-
 ## Overview
 
 A modern, responsive frontend application for managing customer consent and privacy preferences in compliance with Sri Lanka's Personal Data Protection Act (PDPA) 2022. Built with React, TypeScript, and Tailwind CSS, this application provides a comprehensive interface for telecom operators to manage customer consent agreements and privacy settings.
